@@ -12,15 +12,17 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/functions": "^4.0.0"
+    "@azure/functions": "^4.0.0",
+    "@prisma/client": "^6.16.3"
   },
   "devDependencies": {
-    "@types/node": "^18.19.129",
+    "@types/node": "^20.19.19",
     "azure-functions-core-tools": "^4.x",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
+    "prisma": "^6.16.3",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "typescript": "^5.9.3"
   }
 }

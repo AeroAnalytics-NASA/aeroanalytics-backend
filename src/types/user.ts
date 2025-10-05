@@ -1,7 +1,7 @@
 export interface RegisterUserRequest {
   email: string;
-  latitude: number;
-  longitude: number;
+  latitude1: number;
+  longitude1: number;
   latitude2?: number;
   longitude2?: number;
 }
@@ -9,8 +9,8 @@ export interface RegisterUserRequest {
 export interface UserResponse {
   id: string;
   email: string;
-  latitude: number;
-  longitude: number;
+  latitude1: number;
+  longitude1: number;
   latitude2?: number | null;
   longitude2?: number | null;
   createdAt: Date;

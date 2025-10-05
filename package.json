@@ -1,13 +1,13 @@
 {
-  "name": "",
+  "name": "aero-funcs",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/functions/**/index.js",
+  "type": "commonjs",
+  "main": "dist/functions/**/*.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "clean": "rimraf dist",
-  "postinstall": "prisma generate",
     "prestart": "npm run clean && npm run build",
     "start": "func start",
     "test": "echo \"No tests yet...\""

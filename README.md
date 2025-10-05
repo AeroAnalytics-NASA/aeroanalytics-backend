@@ -12,11 +12,11 @@ Local development, adding functions, and deployment for Azure Functions (Node.js
 Project assumptions:
 - Source: `src/**`
 - Build output: `dist/**`
-- Functions entry: `dist/functions/**/index.js`
+- Functions entry: `dist/functions/**/*.js`
 - package.json:
   ```json
   {
-    "main": "dist/functions/**/index.js"
+    "main": "dist/functions/**/*.js"
   }
   ```
 
@@ -96,7 +96,7 @@ Functions:
 ```
 
 Test:
-- http://localhost:7071/api/httpHello?name=Masa
+- http://localhost:7071/api/httpHello?name=NASA
 
 Faster feedback:
 - Terminal 1: `npm run watch`
@@ -109,7 +109,7 @@ func start --port 7072
 
 ## Add a new function (HTTP trigger example)
 
-1) Create `src/functions/hello2/index.ts`:
+1) Create `src/functions/hello2/hello2.ts`:
 ```ts
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 
@@ -135,7 +135,7 @@ func start
 ```
 
 3) Verify:
-- http://localhost:7071/api/hello2?name=Masa
+- http://localhost:7071/api/hello2?name=NASA
 
 Note:
 - Programming Model v4 does not require `function.json`. Functions are discovered from code (`app.http(...)`, `app.timer(...)`, etc.) in the built `.js`.
@@ -193,7 +193,7 @@ func azure functionapp publish $env:APP
 
 Verify:
 ```sh
-curl "https://$APP.azurewebsites.net/api/httpHello?name=Masa"
+curl "https://$APP.azurewebsites.net/api/httpHello?name=NASA"
 ```
 
 ## Troubleshooting
@@ -204,11 +204,11 @@ curl "https://$APP.azurewebsites.net/api/httpHello?name=Masa"
   ```
   Fix:
   - Ensure `tsconfig.json` has `"rootDir": "src"`, `"outDir": "dist"`.
-  - Ensure built files exist under `dist/functions/.../index.js`:
+  - Ensure built files exist under `dist/functions/.../*.js`:
     ```sh
-    ls dist/functions/httpHello/
+    ls dist/functions/hello2/
     ```
-  - Ensure `package.json` has `"main": "dist/functions/**/index.js"`.
+  - Ensure `package.json` has `"main": "dist/functions/**/*.js"`.
   - Rebuild and restart:
     ```sh
     npm run clean && npm run build && func start

@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: AeroAnalytics API
+  description: Azure Functions API for AeroAnalytics application
+  version: 1.0.0
+  contact:
+    name: AeroAnalytics Team
+servers:
+  - url: http://localhost:7071/api
+    description: Local development server
+  - url: https://your-function-app.azurewebsites.net/api
+    description: Production server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Retrieve a list of all registered users
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Register a new user
+      description: Create a new user with email and location coordinates
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}/subscription/{action}:
+    get:
+      summary: Update user subscription status
+      description: Subscribe or unsubscribe a user by clicking a URL link (suitable for email links)
+      operationId: updateUserSubscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+            format: uuid
+        - name: action
+          in: path
+          required: true
+          description: Subscription action to perform
+          schema:
+            type: string
+            enum: [subscribe, unsubscribe]
+      responses:
+        '200':
+          description: Subscription status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionUpdateResponse'
+        '400':
+          description: Bad request - invalid user ID or action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          description: User's email address
+        latitude1:
+          type: number
+          format: double
+          description: Primary latitude coordinate
+        longitude1:
+          type: number
+          format: double
+          description: Primary longitude coordinate
+        latitude2:
+          type: number
+          format: double
+          nullable: true
+          description: Secondary latitude coordinate (optional)
+        longitude2:
+          type: number
+          format: double
+          nullable: true
+          description: Secondary longitude coordinate (optional)
+        isSubscribed:
+          type: boolean
+          description: Whether the user is subscribed to notifications
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was last updated
+      required:
+        - id
+        - email
+        - latitude1
+        - longitude1
+        - isSubscribed
+        - createdAt
+        - updatedAt
+
+    RegisterUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+        latitude1:
+          type: number
+          format: double
+          description: Primary latitude coordinate
+        longitude1:
+          type: number
+          format: double
+          description: Primary longitude coordinate
+        latitude2:
+          type: number
+          format: double
+          description: Secondary latitude coordinate (optional)
+        longitude2:
+          type: number
+          format: double
+          description: Secondary longitude coordinate (optional)
+      required:
+        - email
+        - latitude1
+        - longitude1
+
+    SubscriptionUpdateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          description: User's email address
+        isSubscribed:
+          type: boolean
+          description: Updated subscription status
+        message:
+          type: string
+          description: Success message
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was last updated
+      required:
+        - id
+        - email
+        - isSubscribed
+        - message
+        - updatedAt
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        detail:
+          type: string
+          description: Detailed error information (optional)
+      required:
+        - error

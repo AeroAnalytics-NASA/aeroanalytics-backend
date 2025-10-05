@@ -22,8 +22,6 @@ model User {
   longitude1    Float    @db.DoublePrecision
   latitude2     Float?   @db.DoublePrecision
   longitude2    Float?   @db.DoublePrecision
-  loc1          Unsupported("geography")
-  loc2          Unsupported("geography")?
   createdAt     DateTime @default(now()) @db.Timestamptz(6) @map("created_at")
   updatedAt     DateTime @default(now()) @db.Timestamptz(6) @map("updated_at")
 

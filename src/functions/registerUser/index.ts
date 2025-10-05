@@ -1,7 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { prisma } from "../../lib/database";
 import { validateRegisterUserRequest } from "../../lib/validation";
-import { createPointGeometry, createOptionalPointGeometry } from "../../lib/geography";
 import { RegisterUserRequest } from "../../types/user";
 
 export const registerUser = async (req: HttpRequest, ctx: InvocationContext): Promise<HttpResponseInit> => {
@@ -30,8 +29,6 @@ export const registerUser = async (req: HttpRequest, ctx: InvocationContext): Pr
         longitude1: body.longitude,
         latitude2: body.latitude2,
         longitude2: body.longitude2,
-        loc1: createPointGeometry(body.longitude, body.latitude),
-        loc2: createOptionalPointGeometry(body.longitude2, body.latitude2),
         updatedAt: new Date(),
       },
       create: {
@@ -40,8 +37,6 @@ export const registerUser = async (req: HttpRequest, ctx: InvocationContext): Pr
         longitude1: body.longitude,
         latitude2: body.latitude2,
         longitude2: body.longitude2,
-        loc1: createPointGeometry(body.longitude, body.latitude),
-        loc2: createOptionalPointGeometry(body.longitude2, body.latitude2),
       },
     });
 

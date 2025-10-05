@@ -1,3 +1,8 @@
+-- Enable required extensions for this schema
+CREATE EXTENSION IF NOT EXISTS citext;
+CREATE EXTENSION IF NOT EXISTS pgcrypto; -- for gen_random_uuid()
+CREATE EXTENSION IF NOT EXISTS postgis;  -- for geography type
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -7,8 +12,6 @@ CREATE TABLE "user" (
     "longitude1" DOUBLE PRECISION NOT NULL,
     "latitude2" DOUBLE PRECISION,
     "longitude2" DOUBLE PRECISION,
-    "loc1" geography NOT NULL,
-    "loc2" geography,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

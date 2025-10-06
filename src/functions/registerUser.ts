@@ -6,7 +6,7 @@ import {
 } from "@azure/functions";
 import { prisma } from "../lib/prisma";
 import { RegisterUserRequest } from "../types/user";
-import sgMail from '@sendgrid/mail'
+import * as sgMail from '@sendgrid/mail'
 
 // Initialize SendGrid
 const apiKey = process.env.SENDGRID_API_KEY;

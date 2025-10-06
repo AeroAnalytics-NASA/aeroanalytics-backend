@@ -12,27 +12,99 @@ servers:
     description: Production server
 
 paths:
-  /users:
+  /air-quality:
     get:
-      summary: Get all users
-      description: Retrieve a list of all registered users
-      operationId: getUsers
+      summary: Get air quality data
+      description: Returns mock air quality data for testing purposes
+      operationId: getAirQuality
+      parameters:
+        - name: latitude
+          in: query
+          required: false
+          description: Latitude coordinate (currently ignored in mock implementation)
+          schema:
+            type: number
+            format: double
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          in: query
+          required: false
+          description: Longitude coordinate (currently ignored in mock implementation)
+          schema:
+            type: number
+            format: double
+            minimum: -180
+            maximum: 180
       responses:
         '200':
-          description: List of users retrieved successfully
+          description: Air quality data response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AirQualityResponse'
 
+  /httpHello:
+    get:
+      summary: Hello endpoint
+      description: Simple hello endpoint for testing
+      operationId: httpHello
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Name to greet
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hello response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Greeting message
+                  time:
+                    type: string
+                    format: date-time
+                    description: Current timestamp
+                required:
+                  - message
+                  - time
+    post:
+      summary: Hello endpoint (POST)
+      description: Simple hello endpoint for testing with POST body
+      operationId: httpHelloPost
+      requestBody:
+        required: false
+        content:
+          text/plain:
+            schema:
+              type: string
+              description: Name to greet
+      responses:
+        '200':
+          description: Hello response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Greeting message
+                  time:
+                    type: string
+                    format: date-time
+                    description: Current timestamp
+                required:
+                  - message
+                  - time
+
+  /users:
     post:
       summary: Register a new user
       description: Create a new user with email and location coordinates
@@ -215,6 +287,130 @@ components:
         - isSubscribed
         - message
         - updatedAt
+
+    AirQualityResponse:
+      type: object
+      properties:
+        location:
+          type: object
+          properties:
+            neighborhood:
+              type: string
+              description: Neighborhood name
+              example: "Downtown"
+            city:
+              type: string
+              description: City name
+              example: "Vancouver"
+            country:
+              type: string
+              description: Country name
+              example: "Canada"
+            latitude:
+              type: number
+              format: double
+              description: Latitude coordinate
+              example: 49.2827
+            longitude:
+              type: number
+              format: double
+              description: Longitude coordinate
+              example: -123.1207
+          required:
+            - neighborhood
+            - city
+            - country
+            - latitude
+            - longitude
+        current:
+          type: object
+          properties:
+            datetime:
+              type: string
+              format: date-time
+              description: Current datetime in ISO format
+              example: "2025-10-06T14:30:00.000Z"
+            AQI:
+              type: integer
+              description: Air Quality Index
+              example: 65
+            AQI_category:
+              type: string
+              description: AQI category
+              example: "Moderate"
+            AQI_color:
+              type: string
+              description: HEX color code for AQI category
+              example: "#FFFF00"
+            NO2:
+              type: number
+              format: double
+              description: Nitrogen Dioxide level
+              example: 22.5
+            O3:
+              type: number
+              format: double
+              description: Ozone level
+              example: 35.1
+            PM25:
+              type: number
+              format: double
+              description: PM2.5 particulate matter level
+              example: 18.9
+          required:
+            - datetime
+            - AQI
+            - AQI_category
+            - AQI_color
+            - NO2
+            - O3
+            - PM25
+        daily:
+          type: object
+          properties:
+            hours:
+              type: array
+              items:
+                type: string
+              description: Array of hour labels (24-hour format)
+              example: ["00:00", "01:00", "02:00", "03:00"]
+            AQI:
+              type: array
+              items:
+                type: integer
+              description: Array of AQI values for each hour
+              example: [40, 45, 50, 60]
+            NO2:
+              type: array
+              items:
+                type: number
+                format: double
+              description: Array of NO2 values for each hour
+              example: [20, 19, 22, 25]
+            O3:
+              type: array
+              items:
+                type: number
+                format: double
+              description: Array of O3 values for each hour
+              example: [30, 28, 31, 34]
+            PM25:
+              type: array
+              items:
+                type: number
+                format: double
+              description: Array of PM2.5 values for each hour
+              example: [15, 16, 17, 18]
+          required:
+            - hours
+            - AQI
+            - NO2
+            - O3
+            - PM25
+      required:
+        - location
+        - current
+        - daily
 
     Error:
       type: object

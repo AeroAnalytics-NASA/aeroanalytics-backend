@@ -94,6 +94,29 @@ app.timer("sendNotifications", {
   },
 });
 
+/**
+ * Sends a notification email to a specific user with their monitored locations
+ *
+ * @param user - User object containing id, email, and location coordinates
+ * @param user.id - Unique user identifier
+ * @param user.email - User's email address for notification delivery
+ * @param user.latitude1 - Latitude of user's primary monitoring location
+ * @param user.longitude1 - Longitude of user's primary monitoring location
+ * @param user.latitude2 - Latitude of user's secondary monitoring location (optional)
+ * @param user.longitude2 - Longitude of user's secondary monitoring location (optional)
+ * @param context - Azure Functions invocation context for logging
+ * @returns Promise that resolves when email is sent successfully
+ *
+ * @example
+ * await sendNotificationToUser({
+ *   id: "user123",
+ *   email: "user@example.com",
+ *   latitude1: 49.2827,
+ *   longitude1: -123.1207,
+ *   latitude2: null,
+ *   longitude2: null
+ * }, context);
+ */
 const sendNotificationToUser = async (
   user: {
     id: string;

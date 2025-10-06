@@ -3,27 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "type": "commonjs",
-  "main": "dist/functions/**/*.js",
+  "main": "dist/functions/index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "clean": "rimraf dist",
     "prestart": "npm run clean && npm run build",
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "postinstall": "prisma generate && npm run build"
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
-    "@prisma/client": "^6.16.3"
+    "@prisma/client": "^6.16.3",
+    "@sendgrid/mail": "^8.1.6",
+    "prisma": "^6.16.3"
   },
   "devDependencies": {
     "@types/node": "^20.19.19",
     "azure-functions-core-tools": "^4.x",
     "eslint": "^9.37.0",
     "prettier": "^3.6.2",
-    "prisma": "^6.16.3",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

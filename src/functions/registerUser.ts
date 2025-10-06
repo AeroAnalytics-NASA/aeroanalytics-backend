@@ -93,7 +93,7 @@ app.http("registerUser", {
   },
 });
 
-async function sendSubscriptionVerificationEmail(
+const sendSubscriptionVerificationEmail = async (
   user: {
     id: string;
     email: string;
@@ -103,7 +103,7 @@ async function sendSubscriptionVerificationEmail(
     longitude2: number | null;
   },
   context: InvocationContext
-): Promise<void> {
+): Promise<void> => {
   if (!apiKey) {
     context.warn(
       "SendGrid API key not configured, skipping verification email"
@@ -115,43 +115,27 @@ async function sendSubscriptionVerificationEmail(
     process.env.SENDGRID_FROM_EMAIL || "noreply@aeroanalytics.com";
   const baseUrl = process.env.BASE_URL || "http://localhost:7071";
   const subscribeUrl = `${baseUrl}/api/users/${user.id}/subscription/subscribe`;
-  const unsubscribeUrl = `${baseUrl}/api/users/${user.id}/subscription/unsubscribe`;
 
   const msg = {
     to: user.email,
     from: fromEmail,
-    subject: "Welcome to AeroAnalytics - Confirm Your Subscription",
+    subject: "Welcome to AeroAnalytics - Verify Your Email",
     html: `
       <h2>Welcome to AeroAnalytics!</h2>
       <p>Thank you for registering with AeroAnalytics. Your account has been created successfully.</p>
 
-      <p><strong>Your registered locations:</strong></p>
-      <ul>
-        <li>Primary: ${user.latitude1}, ${user.longitude1}</li>
-        ${user.latitude2 && user.longitude2
-        ? `<li>Secondary: ${user.latitude2}, ${user.longitude2}</li>`
-        : ""
-      }
-      </ul>
-
-      <h3>Subscription Options</h3>
-      <p>Would you like to receive notifications for your monitored areas?</p>
+      <h3>Email Verification</h3>
+      <p>Please verify your email address to complete your registration and start receiving notifications for your monitored areas.</p>
 
       <p>
-        <a href="${subscribeUrl}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0;">
-          ✅ Yes, Subscribe to Notifications
-        </a>
-      </p>
-
-      <p>
-        <a href="${unsubscribeUrl}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0;">
-          ❌ No, Don't Send Notifications
+        <a href="${subscribeUrl}" style="background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0;">
+          ✅ Verify Email Address
         </a>
       </p>
 
       <hr>
       <p><small>
-        You can change your subscription preferences at any time by using the links above.<br>
+        Please verify your email to activate your account.<br>
         If you didn't create this account, please ignore this email.
       </small></p>
     `,
@@ -160,23 +144,15 @@ async function sendSubscriptionVerificationEmail(
 
       Thank you for registering with AeroAnalytics. Your account has been created successfully.
 
-      Your registered locations:
-      - Primary: ${user.latitude1}, ${user.longitude1}
-      ${user.latitude2 && user.longitude2
-        ? `- Secondary: ${user.latitude2}, ${user.longitude2}`
-        : ""
-      }
+      Email Verification:
+      Please verify your email address to complete your registration and start receiving notifications for your monitored areas.
 
-      Subscription Options:
-      Would you like to receive notifications for your monitored areas?
+      Verify your email: ${subscribeUrl}
 
-      Subscribe to notifications: ${subscribeUrl}
-      Don't send notifications: ${unsubscribeUrl}
-
-      You can change your subscription preferences at any time by using the links above.
+      Please verify your email to activate your account.
       If you didn't create this account, please ignore this email.
     `,
   };
 
   await sgMail.send(msg);
-}
+};

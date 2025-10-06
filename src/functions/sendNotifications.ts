@@ -94,7 +94,7 @@ app.timer("sendNotifications", {
   },
 });
 
-async function sendNotificationToUser(
+const sendNotificationToUser = async (
   user: {
     id: string;
     email: string;
@@ -104,7 +104,7 @@ async function sendNotificationToUser(
     longitude2: number | null;
   },
   context: InvocationContext
-): Promise<void> {
+): Promise<void> => {
   context.log(
     `Preparing notification for user ${user.email} at coordinates (${user.latitude1}, ${user.longitude1})`
   );
@@ -166,4 +166,4 @@ async function sendNotificationToUser(
     context.error(`Failed to send email to ${user.email}:`, error);
     throw error;
   }
-}
+};

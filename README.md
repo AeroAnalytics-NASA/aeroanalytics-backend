@@ -4,7 +4,7 @@ Local development, adding functions, and deployment for Azure Functions (Node.js
 
 ## Prerequisites
 
-- Node.js 18 or 20
+- Node.js 22
 - Azure Functions Core Tools v4
 - npm
 - Optional: Azurite (for local emulation of Azure Storage triggers)

@@ -2,7 +2,7 @@
   "name": "",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/functions/*.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "postinstall": "prisma generate",
@@ -15,12 +15,12 @@
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@prisma/client": "^6.16.3",
-    "@sendgrid/mail": "^8.1.6"
+    "@sendgrid/mail": "^8.1.6",
+    "prisma": "^6.16.3"
   },
   "devDependencies": {
     "@types/node": "^24.7.0",
     "azure-functions-core-tools": "^4.x",
-    "prisma": "^6.16.3",
     "rimraf": "^5.0.0",
     "typescript": "^5.9.3"
   }
